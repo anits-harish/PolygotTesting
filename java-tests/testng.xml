@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="HybridSuite Orchestrator">
+    
+    <listeners>
+        <listener class-name="com.example.utils.SuiteSetupListener"/>
+    </listeners>
+
+    <!-- Set browser to chrome or edge here. This will be automatically injected into WebDriverUtil! -->
+    <parameter name="browser" value="edge"/>
+
+    <test name="Python PyTest Wrapper">
+        <classes>
+            <class name="com.example.tests.PytestRunnerTest"/>
+        </classes>
+    </test>
+    
+</suite>
