@@ -25,11 +25,18 @@ public class PytestRunnerTest {
             }
 
             // Command to run pytest using the virtual environment
-            String venvPython = "venv/bin/python3";
+            String os = System.getProperty("os.name").toLowerCase();
+            // Allow overriding the python executable path via system property
+            String customPythonPath = System.getProperty("python.path");
+            String venvPython;
+            
+            if (customPythonPath != null && !customPythonPath.trim().isEmpty()) {
+                venvPython = customPythonPath;
+            } else {
+                venvPython = os.contains("win") ? "venv\\Scripts\\python.exe" : "venv/bin/python3";
+            }
+            
             String[] command = { venvPython, "-m", "pytest", "tests/", "-v" };
-
-            // Note: In Windows it would be venv/Scripts/python, but this is a Mac env based
-            // on logs.
 
             TestLogger.log("TestNG Orchestrator: Triggering Pytest via virtual environment...");
 
