@@ -33,12 +33,22 @@ public class PytestRunnerTest {
             if (customPythonPath != null && !customPythonPath.trim().isEmpty()) {
                 venvPython = customPythonPath;
             } else {
-                venvPython = os.contains("win") ? "venv\\Scripts\\python.exe" : "venv/bin/python3";
+                String winVenvPath = "venv\\Scripts\\python.exe";
+                String macVenvPath = "venv/bin/python3";
+                
+                if (os.contains("win") && new File(targetDir, winVenvPath).exists()) {
+                    venvPython = winVenvPath;
+                } else if (!os.contains("win") && new File(targetDir, macVenvPath).exists()) {
+                    venvPython = macVenvPath;
+                } else {
+                    venvPython = os.contains("win") ? "python" : "python3";
+                    TestLogger.log("Virtual environment not found, falling back to global '" + venvPython + "' command...");
+                }
             }
             
             String[] command = { venvPython, "-m", "pytest", "tests/", "-v" };
 
-            TestLogger.log("TestNG Orchestrator: Triggering Pytest via virtual environment...");
+            TestLogger.log("TestNG Orchestrator: Triggering Pytest with command: " + String.join(" ", command));
 
             ProcessBuilder pb = new ProcessBuilder(command);
             pb.directory(targetDir);
